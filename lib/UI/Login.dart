@@ -42,7 +42,7 @@ void _onpressedlogin(var context, String email, String _password, bool remember)
   }).catchError((error) {
     return Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text("Error" + error.toString())));
-  }).timeout(Duration(seconds: 10), onTimeout: () {
+  }).timeout(Duration(seconds: 20), onTimeout: () {
     return Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text("Timeout error")));
   });

@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -33,6 +34,37 @@ class CourseInfo {
       name: json['name'],
       professor: json['professor'],
       students: json['students'],
+    );
+  }
+}
+
+class CourseDetailed {
+ 
+  ProfStudInfo profe;
+  List<ProfStudInfo> students;
+  CourseDetailed({this.profe, this.students});
+  factory CourseDetailed.fromJson(Map<String, dynamic> json) {
+    return CourseDetailed(
+      profe: json['professor'],
+      students: json['students'],
+    );
+  }
+}
+
+class ProfStudInfo {
+  final int id;
+  final String email;
+  final String username;
+  final String name;
+
+  ProfStudInfo({this.id, this.name, this.username, this.email});
+
+  factory ProfStudInfo.fromJson(Map<String, dynamic> json) {
+    return ProfStudInfo(
+      id: json['id'],
+      name: json['name'],
+      username: json['username'],
+      email: json['email'],
     );
   }
 }
@@ -158,6 +190,36 @@ Future<CToken> checkToken(String token) async {
     return CToken.fromJson(json.decode(response.body));
   } else {
     print("signup failed");
+    print('${response.body}');
+    throw Exception(response.body);
+  }
+}
+
+Future<CourseDetailed> viewCourses(
+    String username, String token, int courseID) async {
+  Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses/$courseID',
+      {'parametro': "valorParametro"});
+  final http.Response response = await http.get(
+    uri,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: "Bearer " + token,
+    },
+  );
+  print('${response.body}');
+  print('${response.statusCode}');
+  if (response.statusCode == 200) {
+    print('${response.body}');
+    List<dynamic> jsonlist = json.decode(response.body) as List;
+    List<ProfStudInfo> studentsList =
+        jsonlist.map((e) => ProfStudInfo.fromJson(e)).toList();
+    ProfStudInfo profe = json.decode(response.body);
+    CourseDetailed courDetail;
+    courDetail.profe = profe;
+    courDetail.students = studentsList; 
+    return courDetail;
+  } else {
+    print("request failed");
     print('${response.body}');
     throw Exception(response.body);
   }

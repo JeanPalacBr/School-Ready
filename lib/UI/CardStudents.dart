@@ -1,26 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:login/Models/course.dart';
+import 'package:login/Models/student.dart';
 
 class CardStudents extends StatelessWidget {
-  Course students;
-  CardStudents(this.students);
+  Student studentss;
+  CardStudents(this.studentss);
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return 
+    MaterialApp(      
+    home: InkWell(
+      onTap: (){
+        
+      },
+      child: Card(
         child: Center(
             child: Column(
       children: <Widget>[
         padding(
-            Text(students.id.toString(), style: TextStyle(fontSize: 18.0)), 1),
-        Text(students.name, style: TextStyle(fontSize: 18.0)),
-        Text(students.professor, style: TextStyle(fontSize: 18.0)),
+            Text(studentss.id.toString(), style: TextStyle(fontSize: 18.0)), 1),
+        Text(studentss.name, style: TextStyle(fontSize: 18.0)),
+        Text(studentss.username, style: TextStyle(fontSize: 18.0)),
         padding(
-            Text(students.students.toString(),
+            Text(studentss.email,
                 style: TextStyle(fontSize: 18.0)),
             2),
       ],
-    )));
+    )))));
   }
 
   Widget padding(Widget widget, int t, [String typeTodo]) {
