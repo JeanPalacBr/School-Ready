@@ -64,20 +64,13 @@ class AccountState with ChangeNotifier {
   }
 
   auth() async {
-    bool valid = false;
-
     SharedPreferences sharedpref = await SharedPreferences.getInstance();
     _isLogged = sharedpref.getBool("isloggeda") ?? false;
     if (_isLogged) {
       _username = await sharedusernameget();
       _token = await sharedtokenget();
       checkToken(_token).then((validity) {
-        valid = validity.valid;
-        if (valid) {
-        _isLogged = true;
-      } else {
-        _isLogged = false;
-      }
+        _isLogged = validity.valid;       
       });
     } else {
       _isLogged = false;

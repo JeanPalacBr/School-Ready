@@ -17,11 +17,11 @@ class Login extends StatelessWidget {
     contextsc = context;
     final AcState = Provider.of<AccountState>(context);
     return MaterialApp(
-        title: "CoursesAPP",
+        title: "SchoolReady!",
         home: Scaffold(
           //resizeToAvoidBottomPadding: false,
           appBar: AppBar(
-            title: Text("CoursesAPP"),
+            title: Text("SchoolReady!"),
           ),
           body: AcState.getlogin ? Home() : Islogged(),
         ));

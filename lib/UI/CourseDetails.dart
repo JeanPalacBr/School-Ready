@@ -1,63 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:login/Models/student.dart';
+import 'package:login/UI/CardStudents.dart';
+import 'package:login/UI/ProfessorDetails.dart';
 import 'package:login/UI/SignUp.dart';
 import 'package:login/viewmodels/AccountState.dart';
 import 'package:login/services/InfoHandler.dart';
 import 'package:provider/provider.dart';
+import 'package:login/UI/Login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Login.dart';
 
-var contextsc;
-bool islogd;
-String usrn;
-String tokn;
-
-List<Student> studentsL = new List<Student>();
-
-class CourseDetails extends StatelessWidget {
-  final int idcourse;
-  CourseDetails(this.idcourse);
-
-  @override
-  Widget build(BuildContext context) {
-    contextsc = context;
-    return MaterialApp(
-        title: "CoursesAPP",
-        home: Scaffold(
-          //resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
-            title: Text("CoursesAPP"),
-          ),
-          body: CourseDetail(idcourse),
-        ));
-  }
-}
-
-class CourseDetail extends StatefulWidget {
+class CourseDetails extends StatefulWidget {
   int courseid;
-  CourseDetail(this.courseid);
+  CourseDetails(this.courseid);
+  @override
   CourseDetailstate createState() => CourseDetailstate(courseid);
 }
 
-class CourseDetailstate extends State {
+class CourseDetailstate extends State<CourseDetails> {
   int idcourse;
+  String profname;
+  String profusername;
+  String profemail;
+  int profid;
   CourseDetailstate(this.idcourse);
+  List<Student> studentsL = new List<Student>();
   final acState = Provider.of<AccountState>(contextsc);
-  bool rememberMe = false;
-
   @override
   void initState() {
     super.initState();
-    acState.auth();
+    acState.getlogin ? CourseDetails(idcourse) : Islogged();
+    _fillCourseStudentList(
+        contextsc, acState.getUsername, acState.getToken, idcourse);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final acState = Provider.of<AccountState>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text("SchoolReady!")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(acState.getUsername),
+                FlatButton(
+                    child: Text("Log Out"),
+                    onPressed: () {
+                      
+                      acState.setLogout();
+                      sharedreflogoutset();
+                    }),
+              ],
+            ),
+            Container(child: Text("Course Details")),
+            Text("Course ID: " + idcourse.toString()),
+            Text("Professor username: " + profusername),
+            Text("professor ID" + profid.toString()),
+            Text("Professor name" + profname),
+            RaisedButton(
+                child: Text("Professor details"),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfessorDetails(profid)));
+                }),
+            Container(child: Text("Students list")),
+            Expanded(child: _list()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _list() {
+    return ListView.builder(
+        itemCount: studentsL.length,
+        itemBuilder: (context, posicion) {
+          var element = studentsL[posicion];
+          return Container(
+            color: Colors.white10,
+            alignment: AlignmentDirectional.centerStart,
+            child: CardStudents(studentsL[posicion]),
+          );
+          //Icon(Icons.delete, color: Colors.white)),
+        });
   }
 
   void _fillCourseStudentList(
-      BuildContext context,
-      String username,
-      String token,
-      int courseid,
-      String profname,
-      String profusername,
-      String profemail,
-      int profid) {
+      BuildContext context, String username, String token, int courseid) {
     viewCourses(username, token, courseid).then((ncourse) {
       setState(() {
         profid = ncourse.profe.id;
@@ -76,39 +111,15 @@ class CourseDetailstate extends State {
         });
       }
     }).catchError((error) {
-      return Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text("Error" + error.toString())));
+      return print(
+          "elerrro---> "); //Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error" + error.toString())));
     });
   }
+}
 
-  bool auxlog = true;
-  final _signUpfkey = GlobalKey<FormState>();
-  final _email = new TextEditingController();
-  final _password = new TextEditingController();
-        String profname="";
-      String profusername="";
-      String profemail="";
-      int profid;
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(child: Text("Course Details")),
-          Text("  " + idcourse.toString()),
-          Text("  " + profusername),
-          Text("  " + profid.toString()),
-          Text("  " + profname),
-          Text("ID"),
-          RaisedButton(
-            child: Text("Sign Up"),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => SignUp()));
-            },
-          ),
-        ],
-      ),
-    );
-  }
+void sharedreflogoutset() async {
+  SharedPreferences sharedpref = await SharedPreferences.getInstance();
+  sharedpref.setString("tokn", "");
+  sharedpref.setString("usrname", "");
+  sharedpref.setBool("isloggeda", false);
 }

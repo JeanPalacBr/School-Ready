@@ -7,26 +7,30 @@ class CardStudents extends StatelessWidget {
   CardStudents(this.studentss);
   @override
   Widget build(BuildContext context) {
-    return 
-    MaterialApp(      
-    home: InkWell(
-      onTap: (){
-        
-      },
-      child: Card(
-        child: Center(
-            child: Column(
-      children: <Widget>[
-        padding(
-            Text(studentss.id.toString(), style: TextStyle(fontSize: 18.0)), 1),
-        Text(studentss.name, style: TextStyle(fontSize: 18.0)),
-        Text(studentss.username, style: TextStyle(fontSize: 18.0)),
-        padding(
-            Text(studentss.email,
-                style: TextStyle(fontSize: 18.0)),
-            2),
-      ],
-    )))));
+    return InkWell(
+        onTap: () {},
+        child: Card(
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+                child: Column(
+              children: <Widget>[
+                padding(
+                    Text("Student ID: " + studentss.id.toString(),
+                        style: TextStyle(fontSize: 18.0)),
+                    1),
+                Text("Name: " + studentss.name,
+                    style: TextStyle(fontSize: 18.0)),
+                Text("Username: " + studentss.username,
+                    style: TextStyle(fontSize: 18.0)),
+                padding(
+                    Text("Email:" + studentss.email,
+                        style: TextStyle(fontSize: 18.0)),
+                    2),
+              ],
+            ))));
   }
 
   Widget padding(Widget widget, int t, [String typeTodo]) {

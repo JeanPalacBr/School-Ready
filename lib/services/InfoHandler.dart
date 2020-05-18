@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:login/UI/Login.dart';
+
 class UserInfo {
   final String token;
   final String username;
@@ -39,15 +41,20 @@ class CourseInfo {
 }
 
 class CourseDetailed {
- 
+  String namecourse;
   ProfStudInfo profe;
   List<ProfStudInfo> students;
-  CourseDetailed({this.profe, this.students});
-  factory CourseDetailed.fromJson(Map<String, dynamic> json) {
+  CourseDetailed({this.namecourse, this.profe, this.students});
+
+  factory CourseDetailed.fromJson(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['students'] as List;
+    print(list.runtimeType);
+    List<ProfStudInfo> studtList =
+        list.map((i) => ProfStudInfo.fromJson(i)).toList();
     return CourseDetailed(
-      profe: json['professor'],
-      students: json['students'],
-    );
+        namecourse: parsedJson['name'],
+        profe: ProfStudInfo.fromJson(parsedJson['professor']),
+        students: studtList);
   }
 }
 
@@ -61,11 +68,43 @@ class ProfStudInfo {
 
   factory ProfStudInfo.fromJson(Map<String, dynamic> json) {
     return ProfStudInfo(
-      id: json['id'],
-      name: json['name'],
-      username: json['username'],
-      email: json['email'],
-    );
+        id: json['id'],
+        email: json['email'],
+        name: json['name'],
+        username: json['username']);
+  }
+}
+
+class ProfeDetailed {
+  final int idcourse;
+  final String name;
+  final String username;
+  final String email;
+  final String phone;
+  final String city;
+  final String country;
+  final String birthday;
+
+  ProfeDetailed(
+      {this.idcourse,
+      this.name,
+      this.username,
+      this.email,
+      this.phone,
+      this.city,
+      this.country,
+      this.birthday});
+
+  factory ProfeDetailed.fromJson(Map<String, dynamic> json) {
+    return ProfeDetailed(
+        idcourse: json['course_id'],
+        name: json['name'],
+        username: json['username'],
+        email: json['email'],
+        phone: json['phone'],
+        city: json['city'],
+        country: json['country'],
+        birthday: json['birthday']);
   }
 }
 
@@ -128,27 +167,31 @@ Future<UserInfo> signUp(
 }
 
 Future<List<CourseInfo>> showCourses(String username, String token) async {
-  Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses',
-      {'parametro': "valorParametro"});
-  final http.Response response = await http.get(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      HttpHeaders.authorizationHeader: "Bearer " + token,
-    },
-  );
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses',
+        {'parametro': "valorParametro"});
+    final http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
     print('${response.body}');
-    List<dynamic> jsonlist = json.decode(response.body) as List;
-    List<CourseInfo> coursesList =
-        jsonlist.map((e) => CourseInfo.fromJson(e)).toList();
-    return coursesList;
-  } else {
-    print("request failed");
-    print('${response.body}');
-    throw Exception(response.body);
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      List<dynamic> jsonlist = json.decode(response.body) as List;
+      List<CourseInfo> coursesList =
+          jsonlist.map((e) => CourseInfo.fromJson(e)).toList();
+      return coursesList;
+    } else {
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {
+    print(e);
+    Islogged();
   }
 }
 
@@ -197,30 +240,54 @@ Future<CToken> checkToken(String token) async {
 
 Future<CourseDetailed> viewCourses(
     String username, String token, int courseID) async {
-  Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses/$courseID',
-      {'parametro': "valorParametro"});
-  final http.Response response = await http.get(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      HttpHeaders.authorizationHeader: "Bearer " + token,
-    },
-  );
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com",
+        '$username/courses/$courseID', {'parametro': "valorParametro"});
+    final http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
     print('${response.body}');
-    List<dynamic> jsonlist = json.decode(response.body) as List;
-    List<ProfStudInfo> studentsList =
-        jsonlist.map((e) => ProfStudInfo.fromJson(e)).toList();
-    ProfStudInfo profe = json.decode(response.body);
-    CourseDetailed courDetail;
-    courDetail.profe = profe;
-    courDetail.students = studentsList; 
-    return courDetail;
-  } else {
-    print("request failed");
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return CourseDetailed.fromJson(json.decode(response.body));
+    } else {
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {
+    print("el error esssss --->" + e.toString());
+    //  Islogged();
+  }
+}
+
+Future<ProfeDetailed> viewProfessor(
+    String username, String token, int professorID) async {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com",
+        '$username/professors/$professorID', {'parametro': "valorParametro"});
+    final http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
     print('${response.body}');
-    throw Exception(response.body);
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return ProfeDetailed.fromJson(json.decode(response.body));
+    } else {
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {
+    print("el error esssss --->" + e.toString());
+    //  Islogged();
   }
 }
