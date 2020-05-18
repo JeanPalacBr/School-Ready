@@ -9,9 +9,10 @@ import 'Login.dart';
 
 class ProfessorDetails extends StatefulWidget {
   int profeid;
-  ProfessorDetails(this.profeid);
+  ProfessorDetails({Key key, @required this.profeid}) : super(key: key);
   @override
-  ProfessorDetailsstate createState() => ProfessorDetailsstate(profeid);
+  ProfessorDetailsstate createState() =>
+      ProfessorDetailsstate(profeid: profeid);
 }
 
 class ProfessorDetailsstate extends State<ProfessorDetails> {
@@ -24,13 +25,13 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
   String profcity;
   String profcountry;
   String profbirthday;
-  ProfessorDetailsstate(this.profeid);
+  ProfessorDetailsstate({@required this.profeid});
   List<Student> studentsL = new List<Student>();
   final acState = Provider.of<AccountState>(contextsc);
   @override
   void initState() {
     super.initState();
-    acState.getlogin ? ProfessorDetailsstate(profeid) : Islogged();
+    acState.getlogin ? ProfessorDetailsstate(profeid: profeid) : Islogged();
     _fillProfessorDetails(
         contextsc, acState.getUsername, acState.getToken, profeid);
   }
@@ -49,9 +50,18 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
                   sharedreflogoutset();
                 });
               },
-              child: 
-              Row(
-                children: <Widget>[Text("Logout"),
+              child: Row(
+                children: <Widget>[
+                             Text(
+                acState.getUsername+", ",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+                  FlatButton(
+                      child: Text("Log Out",style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        acState.setLogout();
+                        sharedreflogoutset();
+                      }),
                   Icon(
                     Icons.exit_to_app,
                     size: 26.0,

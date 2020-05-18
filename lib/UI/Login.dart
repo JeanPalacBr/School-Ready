@@ -68,7 +68,7 @@ class Isloggedstate extends State {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.airline_seat_individual_suite,
+            Icons.school,
             size: 100,
           ),
           Form(

@@ -11,7 +11,7 @@ class CardCourse extends StatelessWidget {
     return InkWell(
         onTap: () {
           print(coursess.name);
-          Navigator.push(context,
+          Navigator.push(context,          
               MaterialPageRoute(builder: (context) => CourseDetails(coursess.id)));
         },
         child: Card(

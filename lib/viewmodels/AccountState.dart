@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login/UI/Login.dart';
 import 'package:login/services/InfoHandler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -60,6 +61,7 @@ class AccountState with ChangeNotifier {
 
   void setLogout() {
     _isLogged = false;
+    Islogged();
     notifyListeners();
   }
 

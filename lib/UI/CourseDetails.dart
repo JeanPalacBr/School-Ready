@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:login/Models/student.dart';
 import 'package:login/UI/CardStudents.dart';
 import 'package:login/UI/ProfessorDetails.dart';
-import 'package:login/UI/SignUp.dart';
 import 'package:login/viewmodels/AccountState.dart';
 import 'package:login/services/InfoHandler.dart';
 import 'package:provider/provider.dart';
@@ -25,18 +24,18 @@ class CourseDetailstate extends State<CourseDetails> {
   int profid;
   CourseDetailstate(this.idcourse);
   List<Student> studentsL = new List<Student>();
-  final acState = Provider.of<AccountState>(contextsc);
+  final acStates = Provider.of<AccountState>(contextsc);
   @override
   void initState() {
     super.initState();
-    acState.getlogin ? CourseDetails(idcourse) : Islogged();
+    acStates.getlogin ? CourseDetails(idcourse) : Islogged();
     _fillCourseStudentList(
-        contextsc, acState.getUsername, acState.getToken, idcourse);
+        contextsc, acStates.getUsername, acStates.getToken, idcourse);
   }
 
   @override
   Widget build(BuildContext context) {
-    final acState = Provider.of<AccountState>(context);
+   final acState = Provider.of<AccountState>(context);
     return Scaffold(
       appBar: AppBar(title: Text("SchoolReady!")),
       body: Center(
@@ -50,7 +49,6 @@ class CourseDetailstate extends State<CourseDetails> {
                 FlatButton(
                     child: Text("Log Out"),
                     onPressed: () {
-                      
                       acState.setLogout();
                       sharedreflogoutset();
                     }),
@@ -67,7 +65,8 @@ class CourseDetailstate extends State<CourseDetails> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ProfessorDetails(profid)));
+                          builder: (context) =>
+                              ProfessorDetails(profeid: profid)));
                 }),
             Container(child: Text("Students list")),
             Expanded(child: _list()),
