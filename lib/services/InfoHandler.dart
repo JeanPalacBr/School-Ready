@@ -108,12 +108,83 @@ class ProfeDetailed {
   }
 }
 
+class StudentDetailed {
+  final int idcourse;
+  final String name;
+  final String username;
+  final String phone;
+  final String email;
+  final String city;
+  final String country;
+  final String birthday;
+
+  StudentDetailed(
+      {this.idcourse,
+      this.name,
+      this.username,
+      this.email,
+      this.phone,
+      this.city,
+      this.country,
+      this.birthday});
+
+  factory StudentDetailed.fromJson(Map<String, dynamic> json) {
+    return StudentDetailed(
+        idcourse: json['course_id'],
+        name: json['name'],
+        username: json['username'],
+        email: json['email'],
+        phone: json['phone'],
+        city: json['city'],
+        country: json['country'],
+        birthday: json['birthday']);
+  }
+}
+
+class NewStudentadded {
+  final int dbid;
+  final String courseid;
+  final String personid;
+  final String createdat;
+  final String updatedat;
+  final String id;
+
+  NewStudentadded({
+    this.dbid,
+    this.courseid,
+    this.personid,
+    this.createdat,
+    this.updatedat,
+    this.id,
+  });
+
+  factory NewStudentadded.fromJson(Map<String, dynamic> json) {
+    return NewStudentadded(
+        dbid: json['db_id'],
+        courseid: json['course_id'],
+        personid: json['person_id'],
+        createdat: json['created_at'],
+        updatedat: json['updated_at'],
+        id: json['id']);
+  }
+}
+
 class CToken {
   final bool valid;
   CToken({this.valid});
   factory CToken.fromJson(Map<String, dynamic> json) {
     return CToken(
       valid: json['valid'],
+    );
+  }
+}
+
+class Cconnection {
+  final String greeting;
+  Cconnection({this.greeting});
+  factory Cconnection.fromJson(Map<String, dynamic> json) {
+    return Cconnection(
+      greeting: json['greeting'],
     );
   }
 }
@@ -289,5 +360,76 @@ Future<ProfeDetailed> viewProfessor(
   } catch (e) {
     print("el error esssss --->" + e.toString());
     //  Islogged();
+  }
+}
+
+Future<StudentDetailed> viewStudent(
+    String username, String token, int studentID) async {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com",
+        '$username/professors/$studentID', {'parametro': "valorParametro"});
+    final http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
+    print('${response.body}');
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return StudentDetailed.fromJson(json.decode(response.body));
+    } else {
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {
+    print("el error esssss --->" + e.toString());
+    //  Islogged();
+  }
+}
+
+Future<NewStudentadded> createStudents(
+    String username, String token, String courseID) async {
+  Uri uri = Uri.https("movil-api.herokuapp.com", '$username/students',
+      {'parametro': "valorParametro"});
+  final http.Response response = await http.post(
+    uri,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: "Bearer " + token,
+    },
+    body: jsonEncode(<String, String>{'courseId': courseID}),
+  );
+  print('${response.body}');
+  print('${response.statusCode}');
+  if (response.statusCode == 200) {
+    print('${response.body}');
+    return NewStudentadded.fromJson(json.decode(response.body));
+  } else {
+    print("request failed");
+    print('${response.body}');
+    throw Exception(response.body);
+  }
+}
+
+Future<Cconnection> checkConnection() async {
+  final http.Response response = await http.get(
+    'https://movil-api.herokuapp.com',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+
+  print('${response.body}');
+  print('${response.statusCode}');
+  if (response.statusCode == 200) {
+    print('${response.body}');
+    return Cconnection.fromJson(json.decode(response.body));
+  } else {
+    print("signup failed");
+    print('${response.body}');
+    throw Exception(response.body);
   }
 }

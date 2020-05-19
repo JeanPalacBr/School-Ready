@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:login/Models/student.dart';
+import 'package:login/UI/NavDrawer.dart';
 import 'package:login/viewmodels/AccountState.dart';
 import 'package:login/services/InfoHandler.dart';
 import 'package:provider/provider.dart';
-import 'package:login/UI/Login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'Login.dart';
 
-class StudentsDetails extends  StatelessWidget {
+import 'package:shared_preferences/shared_preferences.dart';
+
+class StudentsDetails extends StatelessWidget {
   int studentid;
   StudentsDetails({Key key, @required this.studentid}) : super(key: key);
   @override
-
   int profidcourse;
   String profname;
   String profusername;
@@ -25,35 +23,10 @@ class StudentsDetails extends  StatelessWidget {
   Widget build(BuildContext context) {
     final acState = Provider.of<AccountState>(context);
     return Scaffold(
-      appBar: AppBar(title: Text("SchoolReady!"), actions: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {                
-                  acState.setLogout();
-                  sharedreflogoutset();
-               
-              },
-              child: Row(
-                children: <Widget>[
-                             Text(
-                acState.getUsername+", ",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
-                  FlatButton(
-                      child: Text("Log Out",style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        acState.setLogout();
-                        sharedreflogoutset();
-                      }),
-                  Icon(
-                    Icons.exit_to_app,
-                    size: 26.0,
-                  ),
-                ],
-              ),
-            ))
-      ]),
+      appBar: AppBar(
+        title: Text("SchoolReady!"),
+      ),
+      drawer: NavDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -113,14 +86,14 @@ class StudentsDetails extends  StatelessWidget {
   void _fillProfessorDetails(
       BuildContext context, String username, String token, int courseid) {
     viewProfessor(username, token, courseid).then((profedet) {
-        profidcourse = profedet.idcourse;
-        profname = profedet.name;
-        profusername = profedet.username;
-        profemail = profedet.email;
-        profphone = profedet.phone;
-        profcity = profedet.city;
-        profcountry = profedet.country;
-        profbirthday = profedet.birthday;
+      profidcourse = profedet.idcourse;
+      profname = profedet.name;
+      profusername = profedet.username;
+      profemail = profedet.email;
+      profphone = profedet.phone;
+      profcity = profedet.city;
+      profcountry = profedet.country;
+      profbirthday = profedet.birthday;
     }).catchError((error) {
       return print(
           "elerrro---> "); //Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error" + error.toString())));

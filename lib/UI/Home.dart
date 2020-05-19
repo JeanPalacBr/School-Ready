@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login/UI/NavDrawer.dart';
 import 'package:login/services/InfoHandler.dart';
 import 'package:login/Models/course.dart';
 import 'package:login/UI/Login.dart';
@@ -26,23 +27,14 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final acState = Provider.of<AccountState>(context);
+    
     return Scaffold(
+      appBar: AppBar(title: Text("School Ready!"),),
+       drawer: NavDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(acState.getUsername),
-                FlatButton(
-                    child: Text("Log Out"),
-                    onPressed: () {
-                      acState.setLogout();
-                      sharedreflogoutset();
-                    }),
-              ],
-            ),
+          children: <Widget>[           
             Expanded(child: _list()),
             FloatingActionButton(
                 onPressed: () {

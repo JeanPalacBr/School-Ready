@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login/Models/student.dart';
 import 'package:login/UI/CardStudents.dart';
+import 'package:login/UI/NavDrawer.dart';
 import 'package:login/UI/ProfessorDetails.dart';
 import 'package:login/viewmodels/AccountState.dart';
 import 'package:login/services/InfoHandler.dart';
@@ -37,40 +38,41 @@ class CourseDetailstate extends State<CourseDetails> {
   Widget build(BuildContext context) {
    final acState = Provider.of<AccountState>(context);
     return Scaffold(
-      appBar: AppBar(title: Text("SchoolReady!")),
+      appBar: AppBar(title: Text("SchoolReady!"), actions: <Widget>[
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 15, 18, 0),
+          child: Text(
+            acState.getUsername,
+            style: TextStyle(fontSize: 19, color: Colors.white),
+          ),
+        ),
+      ]),            
+       drawer: NavDrawer(),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(acState.getUsername),
-                FlatButton(
-                    child: Text("Log Out"),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0, 20, 18, 0),
+          child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                
+                Container(child: Text("Course Details")),
+                Text("Course ID: " + idcourse.toString()),
+                Text("Professor username: " + profusername),
+                Text("professor ID" + profid.toString()),
+                Text("Professor name" + profname),
+                RaisedButton(
+                    child: Text("Professor details"),
                     onPressed: () {
-                      acState.setLogout();
-                      sharedreflogoutset();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfessorDetails(profeid: profid)));
                     }),
+                Container(child: Text("Students list")),
+                Expanded(child: _list()),
               ],
-            ),
-            Container(child: Text("Course Details")),
-            Text("Course ID: " + idcourse.toString()),
-            Text("Professor username: " + profusername),
-            Text("professor ID" + profid.toString()),
-            Text("Professor name" + profname),
-            RaisedButton(
-                child: Text("Professor details"),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ProfessorDetails(profeid: profid)));
-                }),
-            Container(child: Text("Students list")),
-            Expanded(child: _list()),
-          ],
+            ),      
         ),
       ),
     );

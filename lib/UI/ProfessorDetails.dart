@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login/Models/student.dart';
+import 'package:login/UI/NavDrawer.dart';
 import 'package:login/viewmodels/AccountState.dart';
 import 'package:login/services/InfoHandler.dart';
 import 'package:provider/provider.dart';
@@ -42,52 +43,17 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
     return Scaffold(
       appBar: AppBar(title: Text("SchoolReady!"), actions: <Widget>[
         Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  acState.setLogout();
-                  sharedreflogoutset();
-                });
-              },
-              child: Row(
-                children: <Widget>[
-                             Text(
-                acState.getUsername+", ",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
-                  FlatButton(
-                      child: Text("Log Out",style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        acState.setLogout();
-                        sharedreflogoutset();
-                      }),
-                  Icon(
-                    Icons.exit_to_app,
-                    size: 26.0,
-                  ),
-                ],
-              ),
-            ))
+          padding: EdgeInsets.only(right: 20.0),
+          child: Text(
+            acState.getUsername + ", ",
+            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+        ),
       ]),
+      drawer: NavDrawer(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                acState.getUsername,
-                style: TextStyle(fontSize: 18),
-              ),
-              FlatButton(
-                  child: Text("Log Out"),
-                  onPressed: () {
-                    acState.setLogout();
-                    sharedreflogoutset();
-                  }),
-            ],
-          ),
           Container(child: Text("Professor Details")),
           Text(
             "Professor ID: " + profeid.toString(),

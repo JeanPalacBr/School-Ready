@@ -20,9 +20,7 @@ class Login extends StatelessWidget {
         title: "SchoolReady!",
         home: Scaffold(
           //resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
-            title: Text("SchoolReady!"),
-          ),
+          
           body: AcState.getlogin ? Home() : Islogged(),
         ));
     //home: AcState.getlogin? Home():islogged());
