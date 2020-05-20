@@ -57,11 +57,11 @@ class RestartDBDialogState extends State<RestartDBDialog> {
   }
 
   void restartdata(String username, String token) async {
-    restartDB(username, token).then((connect) {
+    restartDB(username, token,context).then((connect) {
       setState(() {
         bool con = connect.restart;
         if (con) {
-          restart = true;
+          restart = true;          
         } else {
           restart = false;
         }

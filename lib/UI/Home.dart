@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
   
 
   void _addNewCourse(BuildContext context, String username, String token) {
-    createCourses(username, token).then((ncourse) {
+    createCourses(username, token,context).then((ncourse) {
       Course newCourse = Course(
           id: ncourse.id,
           name: ncourse.name,
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
   }
 
   void _getUserCourses(BuildContext context, String username, String token) {
-    showCourses(username, token).then((ncourse) {
+    showCourses(username, token,context).then((ncourse) {
       for (var i = 0; i < ncourse.length; i++) {
       Course newCourse = Course(
           id: ncourse[i].id,

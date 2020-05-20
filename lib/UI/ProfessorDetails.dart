@@ -159,7 +159,7 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
 
   void _fillProfessorDetails(
       BuildContext context, String username, String token, int courseid) {
-    viewProfessor(username, token, courseid).then((profedet) {
+    viewProfessor(username, token, courseid,context).then((profedet) {
       setState(() {
         profidcourse = profedet.idcourse;
         profname = profedet.name;
@@ -215,7 +215,7 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
               profname,
               textAlign: TextAlign.center,
               style: new TextStyle(
-                fontSize: 40,
+                fontSize: 25,
                 color: Colors.white,
               ),
             ),

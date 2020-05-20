@@ -73,7 +73,7 @@ class Isloggedstate extends State {
   @override
   void initState() {
     super.initState();
-    acState.auth();
+    acState.auth(context);
   }
 
   bool auxlog = true;

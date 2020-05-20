@@ -58,7 +58,7 @@ class ShowProfessorsState extends State<ShowProfessors> {
       }
   
   void _getStudents(BuildContext context, String username, String token) {
-    showProfessors(username, token).then((profes) {
+    showProfessors(username, token,context).then((profes) {
       for (var i = 0; i < profes.length; i++) {
       Professor newprofe = Professor(
           id: profes[i].id,

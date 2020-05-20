@@ -254,7 +254,7 @@ Future<UserInfo> signUp(
   } catch (e) {}
 }
 
-Future<List<CourseInfo>> showCourses(String username, String token) async {
+Future<List<CourseInfo>> showCourses(String username, String token,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses',
         {'parametro': "valorParametro"});
@@ -274,14 +274,14 @@ Future<List<CourseInfo>> showCourses(String username, String token) async {
           jsonlist.map((e) => CourseInfo.fromJson(e)).toList();
       return coursesList;
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }
   } catch (e) {}
 }
 
-Future<CourseInfo> createCourses(String username, String token) async {
+Future<CourseInfo> createCourses(String username, String token,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses',
         {'parametro': "valorParametro"});
@@ -298,14 +298,14 @@ Future<CourseInfo> createCourses(String username, String token) async {
       print('${response.body}');
       return CourseInfo.fromJson(json.decode(response.body));
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }
   } catch (e) {}
 }
 
-Future<CToken> checkToken(String token) async {
+Future<CToken> checkToken(String token,BuildContext context) async {
   try {
     final http.Response response = await http.post(
       'https://movil-api.herokuapp.com/check/token',
@@ -321,7 +321,7 @@ Future<CToken> checkToken(String token) async {
       print('${response.body}');
       return CToken.fromJson(json.decode(response.body));
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("signup failed");
       print('${response.body}');
     }
@@ -329,7 +329,7 @@ Future<CToken> checkToken(String token) async {
 }
 
 Future<CourseDetailed> viewCourses(
-    String username, String token, int courseID) async {
+    String username, String token, int courseID,BuildContext context) async {
   try {
     Uri uri = Uri.https(
       "movil-api.herokuapp.com",
@@ -348,7 +348,7 @@ Future<CourseDetailed> viewCourses(
       print('${response.body}');
       return CourseDetailed.fromJson(json.decode(response.body));
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }
@@ -358,7 +358,7 @@ Future<CourseDetailed> viewCourses(
 }
 
 Future<ProfeDetailed> viewProfessor(
-    String username, String token, int professorID) async {
+    String username, String token, int professorID,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com",
         '$username/professors/$professorID', {'parametro': "valorParametro"});
@@ -375,7 +375,7 @@ Future<ProfeDetailed> viewProfessor(
       print('${response.body}');
       return ProfeDetailed.fromJson(json.decode(response.body));
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }
@@ -386,7 +386,7 @@ Future<ProfeDetailed> viewProfessor(
 }
 
 Future<StudentDetailed> viewStudent(
-    String username, String token, int studentID) async {
+    String username, String token, int studentID,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com",
         '$username/students/$studentID', {'parametro': "valorParametro"});
@@ -403,7 +403,7 @@ Future<StudentDetailed> viewStudent(
       print('${response.body}');
       return StudentDetailed.fromJson(json.decode(response.body));
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }
@@ -411,7 +411,7 @@ Future<StudentDetailed> viewStudent(
 }
 
 Future<NewStudentadded> createStudents(
-    String username, String token, String courseID) async {
+    String username, String token, String courseID,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com", '$username/students',
         {'parametro': "valorParametro"});
@@ -429,7 +429,7 @@ Future<NewStudentadded> createStudents(
       print('${response.body}');
       return NewStudentadded.fromJson(json.decode(response.body));
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }
@@ -457,7 +457,7 @@ Future<Cconnection> checkConnection() async {
   } catch (e) {}
 }
 
-Future<RestartDBt> restartDB(String username, String token) async {
+Future<RestartDBt> restartDB(String username, String token,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com", '$username/restart',
         {'parametro': "valorParametro"});
@@ -475,14 +475,14 @@ Future<RestartDBt> restartDB(String username, String token) async {
       print('${response.body}');
       return RestartDBt.fromJson(json.decode(response.body));
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("restart failed");
       print('${response.body}');
     }
   } catch (e) {}
 }
 
-Future<List<ProfStudInfo>> showStudents(String username, String token) async {
+Future<List<ProfStudInfo>> showStudents(String username, String token,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com", '$username/students',
         {'parametro': "valorParametro"});
@@ -502,7 +502,7 @@ Future<List<ProfStudInfo>> showStudents(String username, String token) async {
           jsonlist.map((e) => ProfStudInfo.fromJson(e)).toList();
       return studList;
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }
@@ -511,7 +511,7 @@ Future<List<ProfStudInfo>> showStudents(String username, String token) async {
   }
 }
 
-Future<List<ProfStudInfo>> showProfessors(String username, String token) async {
+Future<List<ProfStudInfo>> showProfessors(String username, String token,BuildContext context) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com", '$username/professors',
         {'parametro': "valorParametro"});
@@ -531,7 +531,7 @@ Future<List<ProfStudInfo>> showProfessors(String username, String token) async {
           jsonlist.map((e) => ProfStudInfo.fromJson(e)).toList();
       return studList;
     } else {
-      sharedreflogoutset(contextsc);
+      sharedreflogoutset(context);
       print("request failed");
       print('${response.body}');
     }

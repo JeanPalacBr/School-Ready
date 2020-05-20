@@ -45,7 +45,7 @@ class StudentsDetailsstate extends State<StudentsDetails> {
       Islogged();
     }
     _fillStudentDetails(
-        username??"", token??"", studid??0);
+        username??"", token??"", studid??0,context);
   }
 
   @override
@@ -155,8 +155,8 @@ class StudentsDetailsstate extends State<StudentsDetails> {
   }
 
   void _fillStudentDetails(
-    String username, String token, int studid) {
-    viewStudent(username, token, studid).then((studedet) {
+    String username, String token, int studid, BuildContext context) {
+    viewStudent(username, token, studid,context).then((studedet) {
       setState(() {
         studidcourse = studedet.idcourse;
         studname = studedet.name;
@@ -212,7 +212,7 @@ class StudentsDetailsstate extends State<StudentsDetails> {
               studname??"",
               textAlign: TextAlign.center,
               style: new TextStyle(
-                fontSize: 40,
+                fontSize: 25,
                 color: Colors.white,
               ),
             ),

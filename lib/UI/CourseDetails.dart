@@ -41,7 +41,7 @@ class CourseDetailstate extends State<CourseDetails> {
     } else {
       Islogged();
     }
-    _fillCourseStudentList(username, token, courseid);
+    _fillCourseStudentList(username, token, courseid,context);
   }
 
   @override
@@ -141,10 +141,10 @@ class CourseDetailstate extends State<CourseDetails> {
   }
 
     void _addNewStudent(BuildContext context, String username, String token, int courseID) {
-    createStudents(username, token,courseID.toString()).then((nstudent) {
+    createStudents(username, token,courseID.toString(),context).then((nstudent) {
         setState(() {
           studentsL.clear();
-          _fillCourseStudentList(username, token, courseid);
+          _fillCourseStudentList(username, token, courseid,context);
         });
       
     }).catchError((error) {
@@ -153,8 +153,8 @@ class CourseDetailstate extends State<CourseDetails> {
     });
   }
 
-  void _fillCourseStudentList(String username, String token, int courseid) {
-    viewCourses(username, token, courseid).then((ncourse) {
+  void _fillCourseStudentList(String username, String token, int courseid,BuildContext context) {
+    viewCourses(username, token, courseid,context).then((ncourse) {
       setState(() {
         profid = ncourse.profe.id;
         profemail = ncourse.profe.email;
