@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:login/Models/professor.dart';
 import 'package:login/Models/student.dart';
+import 'package:login/UI/CardProfessor.dart';
 import 'package:login/UI/CardStudents.dart';
 import 'package:login/UI/NavDrawer.dart';
 import 'package:login/services/InfoHandler.dart';
+import 'package:login/Models/course.dart';
 import 'package:login/UI/Login.dart';
 import 'package:login/viewmodels/AccountState.dart';
+import 'package:login/UI/CardCourse.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Login.dart';
 
-class ShowStudents extends StatefulWidget {
+class ShowProfessors extends StatefulWidget {
   @override
-  ShowStudentsState createState() => ShowStudentsState();
+  ShowProfessorsState createState() => ShowProfessorsState();
 }
 
-class ShowStudentsState extends State<ShowStudents> {
-  List<Student> studentsList = new List<Student>();
+class ShowProfessorsState extends State<ShowProfessors> {
+  List<Professor> professorsList = new List<Professor>();
   final acState = Provider.of<AccountState>(contextsc);
   @override
   void initState() {
     super.initState();
-    acState.getlogin ? ShowStudents() : Islogged();
+    acState.getlogin ? ShowProfessors() : Islogged();
     _getStudents(contextsc, acState.getUsername, acState.getToken);
   }
 
@@ -44,12 +48,12 @@ class ShowStudentsState extends State<ShowStudents> {
 
   Widget _list() {
     return ListView.builder(
-      itemCount: studentsList.length,
+      itemCount: professorsList.length,
       itemBuilder: (context, posicion) {       
         return Container(
               color: Colors.white10,
               alignment: AlignmentDirectional.centerStart,
-              child: CardStudents(studentsList[posicion]),
+              child: CardProfessor(professorsList[posicion]),
                 
               );
           //Icon(Icons.delete, color: Colors.white)),
@@ -58,15 +62,15 @@ class ShowStudentsState extends State<ShowStudents> {
       }
   
   void _getStudents(BuildContext context, String username, String token) {
-    showStudents(username, token).then((studt) {
-      for (var i = 0; i < studt.length; i++) {
-      Student newstudent = Student(
-          id: studt[i].id,
-          name: studt[i].name,
-          username: studt[i].username,
-          email: studt[i].email);
+    showProfessors(username, token).then((profes) {
+      for (var i = 0; i < profes.length; i++) {
+      Professor newprofe = Professor(
+          id: profes[i].id,
+          name: profes[i].name,
+          username: profes[i].username,
+          email: profes[i].email);
           setState(() {
-          studentsList.add(newstudent);    
+          professorsList.add(newprofe);    
           });          
       }
       

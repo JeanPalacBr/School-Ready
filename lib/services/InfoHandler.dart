@@ -511,6 +511,36 @@ Future<List<ProfStudInfo>> showStudents(String username, String token) async {
   }
 }
 
+Future<List<ProfStudInfo>> showProfessors(String username, String token) async {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com", '$username/professors',
+        {'parametro': "valorParametro"});
+    final http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
+    print('${response.body}');
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      List<dynamic> jsonlist = json.decode(response.body) as List;
+      List<ProfStudInfo> studList =
+          jsonlist.map((e) => ProfStudInfo.fromJson(e)).toList();
+      return studList;
+    } else {
+      sharedreflogoutset(contextsc);
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {
+    print(e);
+  }
+}
+
+
 void sharedreflogoutset(BuildContext context) async {
   final acState = Provider.of<AccountState>(context);
   acState.setLogout();

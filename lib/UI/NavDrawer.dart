@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/UI/ConnectionDialog.dart';
 import 'package:login/UI/Login.dart';
 import 'package:login/UI/RestartDBDialog.dart';
+import 'package:login/UI/ShowProfessors.dart';
 import 'package:login/UI/ShowStudents.dart';
 import 'package:login/UI/StudentsDetails.dart';
 import 'package:login/viewmodels/AccountState.dart';
@@ -42,14 +43,12 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.search),
-            title: Text('Search Professor'),
-            onTap: () => {},
-          ),
-          ListTile(
-            leading: Icon(Icons.search),
-            title: Text('Search Student'),
-            onTap: () => {Navigator.of(context).pop()},
+            leading: Icon(Icons.slideshow),
+            title: Text('Show Professors'),
+            onTap: () => {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ShowProfessors()))
+            },
           ),
           ListTile(
             leading: Icon(Icons.network_check),

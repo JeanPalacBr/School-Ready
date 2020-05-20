@@ -1,20 +1,7 @@
 class Professor {
-  int courseid;
+  int id;
   String name;
-  String username;
   String email;
-  String phone;
-  String city;
-  String country;
-  String bithday;
-  Professor(
-      {this.courseid,
-      this.name,
-      this.email,
-      this.username,
-      this.email,
-      this.phone,
-      this.city,
-      this.country,
-      this.bithday});
+  String username;
+  Professor({this.id, this.name,this.email, this.username});
 }
