@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:login/Models/professor.dart';
-import 'package:login/Models/student.dart';
 import 'package:login/UI/CardProfessor.dart';
-import 'package:login/UI/CardStudents.dart';
 import 'package:login/UI/NavDrawer.dart';
 import 'package:login/services/InfoHandler.dart';
-import 'package:login/Models/course.dart';
 import 'package:login/UI/Login.dart';
 import 'package:login/viewmodels/AccountState.dart';
-import 'package:login/UI/CardCourse.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Login.dart';
@@ -30,7 +26,7 @@ class ShowProfessorsState extends State<ShowProfessors> {
 
   @override
   Widget build(BuildContext context) {
-    final acState = Provider.of<AccountState>(context);
+
     
     return Scaffold(
       appBar: AppBar(title: Text("School Ready!"),),

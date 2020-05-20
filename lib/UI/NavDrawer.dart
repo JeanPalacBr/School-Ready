@@ -4,7 +4,6 @@ import 'package:login/UI/Login.dart';
 import 'package:login/UI/RestartDBDialog.dart';
 import 'package:login/UI/ShowProfessors.dart';
 import 'package:login/UI/ShowStudents.dart';
-import 'package:login/UI/StudentsDetails.dart';
 import 'package:login/viewmodels/AccountState.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -12,9 +12,11 @@ class SignUp extends StatelessWidget {
     return MaterialApp(
         title: "CoursesAPP",
         home: Scaffold(
-          //resizeToAvoidBottomPadding: false,
+          backgroundColor: const Color(0xff167F67),
+          resizeToAvoidBottomPadding: false,
           appBar: AppBar(
-            title: Text("CoursesAPP"),
+            backgroundColor: Colors.black,
+            title: Text("School Ready!"),
           ),
           body: signupform(),
         ));
@@ -55,53 +57,73 @@ class signupformState extends State {
     return Form(
         key: _signUpfkey,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "SignUP!",
-              style: TextStyle(fontSize: 30),
+            Text("SignUP!",
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
+            containerText(
+              TextFormField(
+                autofocus: true,
+                controller: _email,
+                decoration: new InputDecoration(
+                  labelText: "Email",
+                  labelStyle: TextStyle(color: Colors.white),
+                  hintText: "example@ejemplo.com",
+                  hintStyle: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
-            TextFormField(
-              autofocus: true,
-              controller: _email,
-              decoration:
-                  new InputDecoration(labelText: "Email", hintText: "a@a.com"),
-            ),
-            TextFormField(
+            containerText(TextFormField(
               autofocus: true,
               controller: _username,
               decoration: new InputDecoration(
-                  labelText: "Username", hintText: "username"),
+                labelText: "Username",
+                labelStyle: TextStyle(color: Colors.white),
+                hintText: "username",
+                hintStyle: TextStyle(color: Colors.white),
+              ),
               validator: (value2) {
                 if (value2.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
-            ),
-            TextFormField(
+            )),
+            containerText(TextFormField(
               autofocus: true,
               controller: _name,
-              decoration:
-                  new InputDecoration(labelText: "Name", hintText: "Name"),
+              decoration: new InputDecoration(
+                labelText: "Name",
+                labelStyle: TextStyle(color: Colors.white),
+                hintText: "Name",
+                hintStyle: TextStyle(color: Colors.white),
+              ),
               validator: (value3) {
                 if (value3.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
-            ),
-            TextFormField(
+            )),
+            containerText(TextFormField(
               autofocus: true,
               controller: _password,
-              decoration: new InputDecoration(labelText: "Password"),
+              decoration: new InputDecoration(
+                  labelText: "Password",
+                  labelStyle: TextStyle(color: Colors.white)),
               obscureText: true,
               validator: (value4) {
                 if (value4.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
-            ),
+            )),
             RaisedButton(
               child: Text("Register!"),
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
               onPressed: () {
                 if (isEmail(_email.value.text)) {
                   _onpressedSignUp(
@@ -119,5 +141,17 @@ class signupformState extends State {
             )
           ],
         ));
+  }
+
+  Widget containerText(Widget widg) {
+    return Container(
+      margin: const EdgeInsets.all(2.0),
+      padding: const EdgeInsets.all(1.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white, width: 3.0),
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+      ),
+      child: widg,
+    );
   }
 }

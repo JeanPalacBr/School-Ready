@@ -12,8 +12,9 @@ class RestartDBDialog extends StatefulWidget {
 
 class RestartDBDialogState extends State<RestartDBDialog> {
   bool restart = true;
-  @override
+
    final acState = Provider.of<AccountState>(contexth);
+     @override
   void initState() {
     super.initState();
     restartdata(acState.getUsername,acState.getToken);

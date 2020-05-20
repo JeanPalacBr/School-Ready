@@ -3,8 +3,6 @@ import 'package:login/UI/Login.dart';
 import 'package:provider/provider.dart';
 import 'viewmodels/AccountState.dart';
 void main() {
-  
-  
 runApp(
   ChangeNotifierProvider(
     
@@ -14,3 +12,4 @@ runApp(
   ),
 );
 }
+

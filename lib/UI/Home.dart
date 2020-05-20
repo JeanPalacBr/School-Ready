@@ -29,14 +29,17 @@ class _HomeState extends State<Home> {
     final acState = Provider.of<AccountState>(context);
     contexth = context;
     return Scaffold(
-      appBar: AppBar(title: Text("School Ready!"),),
+      appBar: AppBar(title: Text("School Ready!"),
+      backgroundColor: Colors.black),
        drawer: NavDrawer(),
+       
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[           
             Expanded(child: _list()),
             FloatingActionButton(
+              backgroundColor: const Color(0xff167F67),
                 onPressed: () {
                   _addNewCourse(context, acState.getUsername, acState.getToken);
                 },

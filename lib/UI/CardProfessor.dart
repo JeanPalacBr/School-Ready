@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/Models/professor.dart';
 import 'package:login/UI/ProfessorDetails.dart';
-import 'package:login/UI/StudentsDetails.dart';
 import 'package:login/viewmodels/AccountState.dart';
 import 'package:provider/provider.dart';
 

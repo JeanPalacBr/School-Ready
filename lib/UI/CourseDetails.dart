@@ -48,7 +48,7 @@ class CourseDetailstate extends State<CourseDetails> {
   Widget build(BuildContext context) {
     final acStates = Provider.of<AccountState>(context);
     return Scaffold(
-      appBar: AppBar(title: Text("SchoolReady!"), actions: <Widget>[
+      appBar: AppBar(title: Text("SchoolReady!"),backgroundColor: Colors.black, actions: <Widget>[
         Padding(
           padding: EdgeInsets.fromLTRB(0, 15, 18, 0),
           child: Text(
@@ -112,6 +112,8 @@ class CourseDetailstate extends State<CourseDetails> {
           ), Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               studentlistadvice(),FloatingActionButton(
+
+                backgroundColor: const Color(0xff167F67),
                 onPressed: () {
                   _addNewStudent(context,username, token,courseid);
                 },
@@ -171,7 +173,7 @@ class CourseDetailstate extends State<CourseDetails> {
       }
     }).catchError((error) {
       print(
-          "elerrro---> "); //Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error" + error.toString())));
+          "elerrro---> "); 
     });
   }
 }
@@ -186,9 +188,9 @@ Widget studentlistadvice() {
       width: 3.0
     ),
     borderRadius: BorderRadius.all(
-        Radius.circular(20.0) //         <--- border radius here
+        Radius.circular(20.0) 
     ),
-  ), //       <--- BoxDecoration here
+  ),
     child: Text(
       "Students list",
       style: TextStyle(fontSize: 30.0),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login/Models/student.dart';
 import 'package:login/UI/NavDrawer.dart';
-import 'package:login/viewmodels/AccountState.dart';
 import 'package:login/services/InfoHandler.dart';
-import 'package:provider/provider.dart';
 import 'package:login/UI/Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Login.dart';
@@ -53,7 +51,7 @@ class StudentsDetailsstate extends State<StudentsDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("SchoolReady!"), actions: <Widget>[
+      appBar: AppBar(title: Text("SchoolReady!"),backgroundColor: Colors.black, actions: <Widget>[
         Padding(
           padding: EdgeInsets.fromLTRB(0, 15, 18, 0),
           child: Text(

@@ -26,7 +26,6 @@ class ShowStudentsState extends State<ShowStudents> {
 
   @override
   Widget build(BuildContext context) {
-    final acState = Provider.of<AccountState>(context);
     
     return Scaffold(
       appBar: AppBar(title: Text("School Ready!"),),

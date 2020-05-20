@@ -54,7 +54,7 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("SchoolReady!"), actions: <Widget>[
+      appBar: AppBar(title: Text("SchoolReady!"),backgroundColor: Colors.black, actions: <Widget>[
         Padding(
           padding: EdgeInsets.fromLTRB(0, 15, 18, 0),
           child: Text(
