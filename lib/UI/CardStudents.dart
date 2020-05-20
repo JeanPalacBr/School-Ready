@@ -1,17 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/Models/student.dart';
+import 'package:login/UI/StudentsDetails.dart';
+import 'package:login/viewmodels/AccountState.dart';
+import 'package:provider/provider.dart';
 
 class CardStudents extends StatelessWidget {
-  Student studentss;
+  final Student studentss;
   CardStudents(this.studentss);
   @override
   Widget build(BuildContext context) {
+    final acStates = Provider.of<AccountState>(context);
     return InkWell(
         onTap: () {
-          
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StudentsDetails(
+                        studid: studentss.id??"",
+                        username: acStates.getUsername??"",
+                        logged: acStates.getlogin??"",
+                        token: acStates.getToken??"",
+                      )));
         },
         child: Card(
+            color: const Color(0xff167F67),
             elevation: 3,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -21,15 +34,15 @@ class CardStudents extends StatelessWidget {
               children: <Widget>[
                 padding(
                     Text("Student ID: " + studentss.id.toString(),
-                        style: TextStyle(fontSize: 18.0)),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0)),
                     1),
                 Text("Name: " + studentss.name,
-                    style: TextStyle(fontSize: 18.0)),
+                    style: TextStyle(color: Colors.white, fontSize: 18.0)),
                 Text("Username: " + studentss.username,
-                    style: TextStyle(fontSize: 18.0)),
+                    style: TextStyle(color: Colors.white, fontSize: 18.0)),
                 padding(
                     Text("Email:" + studentss.email,
-                        style: TextStyle(fontSize: 18.0)),
+                        style: TextStyle(color: Colors.white, fontSize: 18.0)),
                     2),
               ],
             ))));

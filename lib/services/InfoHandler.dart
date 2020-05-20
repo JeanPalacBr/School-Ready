@@ -1,10 +1,15 @@
 import 'dart:core';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:login/UI/Login.dart';
+import 'package:login/viewmodels/AccountState.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserInfo {
   final String token;
@@ -142,12 +147,12 @@ class StudentDetailed {
 }
 
 class NewStudentadded {
-  final int dbid;
+  final String dbid;
   final String courseid;
-  final String personid;
+  final int personid;
   final String createdat;
   final String updatedat;
-  final String id;
+  final int id;
 
   NewStudentadded({
     this.dbid,
@@ -189,52 +194,64 @@ class Cconnection {
   }
 }
 
-Future<UserInfo> signIn({String email, String password}) async {
-  final http.Response response = await http.post(
-    'https://movil-api.herokuapp.com/signin',
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{'email': email, 'password': password}),
-  );
-
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
-    print('${response.body}');
-    return UserInfo.fromJson(json.decode(response.body));
-  } else {
-    print("signup failed");
-    print('${response.body}');
-    throw Exception(response.body);
+class RestartDBt {
+  final bool restart;
+  RestartDBt({this.restart});
+  factory RestartDBt.fromJson(Map<String, dynamic> json) {
+    return RestartDBt(
+      restart: json['result'],
+    );
   }
+}
+
+Future<UserInfo> signIn({String email, String password}) async {
+  try {
+    final http.Response response = await http.post(
+      'https://movil-api.herokuapp.com/signin',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'email': email, 'password': password}),
+    );
+
+    print('${response.body}');
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return UserInfo.fromJson(json.decode(response.body));
+    } else {
+      print("signup failed");
+      print('${response.body}');
+    }
+  } catch (e) {}
 }
 
 Future<UserInfo> signUp(
     {String email, String password, String username, String name}) async {
-  final http.Response response = await http.post(
-    'https://movil-api.herokuapp.com/signup',
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'email': email,
-      'password': password,
-      'username': username,
-      'name': name
-    }),
-  );
+  try {
+    final http.Response response = await http.post(
+      'https://movil-api.herokuapp.com/signup',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+        'username': username,
+        'name': name
+      }),
+    );
 
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
     print('${response.body}');
-    return UserInfo.fromJson(json.decode(response.body));
-  } else {
-    print("signup failed");
-    print('${response.body}');
-    throw Exception(response.body);
-  }
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return UserInfo.fromJson(json.decode(response.body));
+    } else {
+      print("signup failed");
+      print('${response.body}');
+    }
+  } catch (e) {}
 }
 
 Future<List<CourseInfo>> showCourses(String username, String token) async {
@@ -257,63 +274,67 @@ Future<List<CourseInfo>> showCourses(String username, String token) async {
           jsonlist.map((e) => CourseInfo.fromJson(e)).toList();
       return coursesList;
     } else {
+      sharedreflogoutset(contextsc);
       print("request failed");
       print('${response.body}');
     }
-  } catch (e) {
-    print(e);
-    Islogged();
-  }
+  } catch (e) {}
 }
 
 Future<CourseInfo> createCourses(String username, String token) async {
-  Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses',
-      {'parametro': "valorParametro"});
-  final http.Response response = await http.post(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      HttpHeaders.authorizationHeader: "Bearer " + token,
-    },
-  );
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com", '$username/courses',
+        {'parametro': "valorParametro"});
+    final http.Response response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
     print('${response.body}');
-    return CourseInfo.fromJson(json.decode(response.body));
-  } else {
-    print("request failed");
-    print('${response.body}');
-    throw Exception(response.body);
-  }
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return CourseInfo.fromJson(json.decode(response.body));
+    } else {
+      sharedreflogoutset(contextsc);
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {}
 }
 
 Future<CToken> checkToken(String token) async {
-  final http.Response response = await http.post(
-    'https://movil-api.herokuapp.com/check/token',
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{'token': token}),
-  );
-  print('${token}');
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
+  try {
+    final http.Response response = await http.post(
+      'https://movil-api.herokuapp.com/check/token',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'token': token}),
+    );
+    print(token);
     print('${response.body}');
-    return CToken.fromJson(json.decode(response.body));
-  } else {
-    print("signup failed");
-    print('${response.body}');
-    throw Exception(response.body);
-  }
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return CToken.fromJson(json.decode(response.body));
+    } else {
+      sharedreflogoutset(contextsc);
+      print("signup failed");
+      print('${response.body}');
+    }
+  } catch (e) {}
 }
 
 Future<CourseDetailed> viewCourses(
     String username, String token, int courseID) async {
   try {
-    Uri uri = Uri.https("movil-api.herokuapp.com",
-        '$username/courses/$courseID', {'parametro': "valorParametro"});
+    Uri uri = Uri.https(
+      "movil-api.herokuapp.com",
+      '$username/courses/$courseID',
+    );
     final http.Response response = await http.get(
       uri,
       headers: <String, String>{
@@ -327,13 +348,13 @@ Future<CourseDetailed> viewCourses(
       print('${response.body}');
       return CourseDetailed.fromJson(json.decode(response.body));
     } else {
+      sharedreflogoutset(contextsc);
       print("request failed");
       print('${response.body}');
     }
-  } catch (e) {
-    print("el error esssss --->" + e.toString());
-    //  Islogged();
-  }
+  } catch (e) {}
+  //print("el error esssss --->" + e.toString());
+  //  Islogged();
 }
 
 Future<ProfeDetailed> viewProfessor(
@@ -354,6 +375,7 @@ Future<ProfeDetailed> viewProfessor(
       print('${response.body}');
       return ProfeDetailed.fromJson(json.decode(response.body));
     } else {
+      sharedreflogoutset(contextsc);
       print("request failed");
       print('${response.body}');
     }
@@ -367,7 +389,7 @@ Future<StudentDetailed> viewStudent(
     String username, String token, int studentID) async {
   try {
     Uri uri = Uri.https("movil-api.herokuapp.com",
-        '$username/professors/$studentID', {'parametro': "valorParametro"});
+        '$username/students/$studentID', {'parametro': "valorParametro"});
     final http.Response response = await http.get(
       uri,
       headers: <String, String>{
@@ -381,55 +403,124 @@ Future<StudentDetailed> viewStudent(
       print('${response.body}');
       return StudentDetailed.fromJson(json.decode(response.body));
     } else {
+      sharedreflogoutset(contextsc);
       print("request failed");
       print('${response.body}');
     }
-  } catch (e) {
-    print("el error esssss --->" + e.toString());
-    //  Islogged();
-  }
+  } catch (e) {}
 }
 
 Future<NewStudentadded> createStudents(
     String username, String token, String courseID) async {
-  Uri uri = Uri.https("movil-api.herokuapp.com", '$username/students',
-      {'parametro': "valorParametro"});
-  final http.Response response = await http.post(
-    uri,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      HttpHeaders.authorizationHeader: "Bearer " + token,
-    },
-    body: jsonEncode(<String, String>{'courseId': courseID}),
-  );
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com", '$username/students',
+        {'parametro': "valorParametro"});
+    final http.Response response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+      body: jsonEncode(<String, String>{'courseId': courseID}),
+    );
     print('${response.body}');
-    return NewStudentadded.fromJson(json.decode(response.body));
-  } else {
-    print("request failed");
-    print('${response.body}');
-    throw Exception(response.body);
-  }
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return NewStudentadded.fromJson(json.decode(response.body));
+    } else {
+      sharedreflogoutset(contextsc);
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {}
 }
 
 Future<Cconnection> checkConnection() async {
-  final http.Response response = await http.get(
-    'https://movil-api.herokuapp.com',
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-  );
+  try {
+    final http.Response response = await http.get(
+      'https://movil-api.herokuapp.com',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
 
-  print('${response.body}');
-  print('${response.statusCode}');
-  if (response.statusCode == 200) {
     print('${response.body}');
-    return Cconnection.fromJson(json.decode(response.body));
-  } else {
-    print("signup failed");
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return Cconnection.fromJson(json.decode(response.body));
+    } else {
+      print("signup failed");
+      print('${response.body}');
+    }
+  } catch (e) {}
+}
+
+Future<RestartDBt> restartDB(String username, String token) async {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com", '$username/restart',
+        {'parametro': "valorParametro"});
+    final http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
+
     print('${response.body}');
-    throw Exception(response.body);
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      return RestartDBt.fromJson(json.decode(response.body));
+    } else {
+      sharedreflogoutset(contextsc);
+      print("restart failed");
+      print('${response.body}');
+    }
+  } catch (e) {}
+}
+
+Future<List<ProfStudInfo>> showStudents(String username, String token) async {
+  try {
+    Uri uri = Uri.https("movil-api.herokuapp.com", '$username/students',
+        {'parametro': "valorParametro"});
+    final http.Response response = await http.get(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
+    print('${response.body}');
+    print('${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('${response.body}');
+      List<dynamic> jsonlist = json.decode(response.body) as List;
+      List<ProfStudInfo> studList =
+          jsonlist.map((e) => ProfStudInfo.fromJson(e)).toList();
+      return studList;
+    } else {
+      sharedreflogoutset(contextsc);
+      print("request failed");
+      print('${response.body}');
+    }
+  } catch (e) {
+    print(e);
   }
+}
+
+void sharedreflogoutset(BuildContext context) async {
+  final acState = Provider.of<AccountState>(context);
+  acState.setLogout();
+  SharedPreferences sharedpref = await SharedPreferences.getInstance();
+  sharedpref.setString("tokn", "");
+  sharedpref.setString("usrname", "");
+  sharedpref.setBool("isloggeda", false);
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => Login()),
+    (Route<dynamic> route) => false,
+  );
 }

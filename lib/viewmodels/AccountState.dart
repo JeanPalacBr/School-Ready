@@ -14,7 +14,7 @@ class AccountState with ChangeNotifier {
 
   void setLoggedin(String usern, String token, bool log, bool remember) async {
     String exist = "";
-    SharedPreferences sharedpref = await SharedPreferences.getInstance();
+   // SharedPreferences sharedpref = await SharedPreferences.getInstance();
     exist = await sharedusernameget();
     if (exist.length != 0) {
       _isLogged = await sharedLoggedget();

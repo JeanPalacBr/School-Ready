@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:login/Models/student.dart';
+import 'package:login/UI/CardStudents.dart';
 import 'package:login/UI/NavDrawer.dart';
 import 'package:login/services/InfoHandler.dart';
 import 'package:login/Models/course.dart';
@@ -8,26 +10,26 @@ import 'package:login/UI/CardCourse.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Login.dart';
-var contexth;
-class Home extends StatefulWidget {
+
+class ShowStudents extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  ShowStudentsState createState() => ShowStudentsState();
 }
 
-class _HomeState extends State<Home> {
-  List<Course> coursesL = new List<Course>();
+class ShowStudentsState extends State<ShowStudents> {
+  List<Student> studentsList = new List<Student>();
   final acState = Provider.of<AccountState>(contextsc);
   @override
   void initState() {
     super.initState();
-    acState.getlogin ? Home() : Islogged();
-    _getUserCourses(contextsc, acState.getUsername, acState.getToken);
+    acState.getlogin ? ShowStudents() : Islogged();
+    _getStudents(contextsc, acState.getUsername, acState.getToken);
   }
 
   @override
   Widget build(BuildContext context) {
     final acState = Provider.of<AccountState>(context);
-    contexth = context;
+    
     return Scaffold(
       appBar: AppBar(title: Text("School Ready!"),),
        drawer: NavDrawer(),
@@ -36,12 +38,6 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[           
             Expanded(child: _list()),
-            FloatingActionButton(
-                onPressed: () {
-                  _addNewCourse(context, acState.getUsername, acState.getToken);
-                },
-                tooltip: 'Add Course',
-                child: new Icon(Icons.add)),
           ],
         ),
       ),
@@ -50,12 +46,12 @@ class _HomeState extends State<Home> {
 
   Widget _list() {
     return ListView.builder(
-      itemCount: coursesL.length,
+      itemCount: studentsList.length,
       itemBuilder: (context, posicion) {       
         return Container(
               color: Colors.white10,
               alignment: AlignmentDirectional.centerStart,
-              child: CardCourse(coursesL[posicion]),
+              child: CardStudents(studentsList[posicion]),
                 
               );
           //Icon(Icons.delete, color: Colors.white)),
@@ -63,36 +59,16 @@ class _HomeState extends State<Home> {
        } );
       }
   
-
-  void _addNewCourse(BuildContext context, String username, String token) {
-    createCourses(username, token).then((ncourse) {
-      Course newCourse = Course(
-          id: ncourse.id,
-          name: ncourse.name,
-          professor: ncourse.professor,
-          students: ncourse.students);
-          if(newCourse != null){
-            setState(() {
-            coursesL.add(newCourse);        
-            });
-          }
-      
-    }).catchError((error) {
-      return Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text("Error" + error.toString())));
-    });
-  }
-
-  void _getUserCourses(BuildContext context, String username, String token) {
-    showCourses(username, token).then((ncourse) {
-      for (var i = 0; i < ncourse.length; i++) {
-      Course newCourse = Course(
-          id: ncourse[i].id,
-          name: ncourse[i].name,
-          professor: ncourse[i].professor,
-          students: ncourse[i].students);
+  void _getStudents(BuildContext context, String username, String token) {
+    showStudents(username, token).then((studt) {
+      for (var i = 0; i < studt.length; i++) {
+      Student newstudent = Student(
+          id: studt[i].id,
+          name: studt[i].name,
+          username: studt[i].username,
+          email: studt[i].email);
           setState(() {
-          coursesL.add(newCourse);    
+          studentsList.add(newstudent);    
           });          
       }
       

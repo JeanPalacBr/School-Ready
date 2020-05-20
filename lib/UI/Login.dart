@@ -15,13 +15,13 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     contextsc = context;
-    final AcState = Provider.of<AccountState>(context);
+    final acState = Provider.of<AccountState>(context);
     return MaterialApp(
         title: "SchoolReady!",
         home: Scaffold(
           //resizeToAvoidBottomPadding: false,
           
-          body: AcState.getlogin ? Home() : Islogged(),
+          body: acState.getlogin ? Home() : Islogged(),
         ));
     //home: AcState.getlogin? Home():islogged());
   }

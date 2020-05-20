@@ -10,10 +10,16 @@ import 'Login.dart';
 
 class ProfessorDetails extends StatefulWidget {
   int profeid;
-  ProfessorDetails({Key key, @required this.profeid}) : super(key: key);
+  String username;
+  String token;
+  bool logged;
+
+  ProfessorDetails(
+      {Key key, @required this.profeid, this.username, this.token, this.logged})
+      : super(key: key);
   @override
-  ProfessorDetailsstate createState() =>
-      ProfessorDetailsstate(profeid: profeid);
+  ProfessorDetailsstate createState() => ProfessorDetailsstate(
+      profeid: profeid, username: username, logged: logged, token: token);
 }
 
 class ProfessorDetailsstate extends State<ProfessorDetails> {
@@ -26,27 +32,34 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
   String profcity;
   String profcountry;
   String profbirthday;
-  ProfessorDetailsstate({@required this.profeid});
+  String username;
+  String token;
+  bool logged;
+  ProfessorDetailsstate(
+      {@required this.profeid, this.username, this.token, this.logged});
   List<Student> studentsL = new List<Student>();
   final acState = Provider.of<AccountState>(contextsc);
   @override
   void initState() {
     super.initState();
-    acState.getlogin ? ProfessorDetailsstate(profeid: profeid) : Islogged();
+    if (logged) {
+      ProfessorDetailsstate(profeid: profeid);
+    } else {
+      Islogged();
+    }
     _fillProfessorDetails(
         contextsc, acState.getUsername, acState.getToken, profeid);
   }
 
   @override
   Widget build(BuildContext context) {
-    final acState = Provider.of<AccountState>(context);
     return Scaffold(
       appBar: AppBar(title: Text("SchoolReady!"), actions: <Widget>[
         Padding(
-          padding: EdgeInsets.only(right: 20.0),
+          padding: EdgeInsets.fromLTRB(0, 15, 18, 0),
           child: Text(
-            acState.getUsername + ", ",
-            style: TextStyle(fontSize: 18, color: Colors.white),
+            username,
+            style: TextStyle(fontSize: 19, color: Colors.white),
           ),
         ),
       ]),
@@ -54,38 +67,90 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(child: Text("Professor Details")),
-          Text(
-            "Professor ID: " + profeid.toString(),
-            style: TextStyle(fontSize: 21),
+          headerWidget(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 36, 8, 15),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.confirmation_number),
+                Text(
+                  "Professor ID: " + profeid.toString(),
+                  style: TextStyle(fontSize: 21),
+                )
+              ],
+            ),
           ),
-          Text(
-            "Username: " + profusername,
-            style: TextStyle(fontSize: 21),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.person),
+                Text(
+                  "Username: " + profusername,
+                  style: TextStyle(fontSize: 21),
+                )
+              ],
+            ),
           ),
-          Text(
-            "Name: " + profname,
-            style: TextStyle(fontSize: 21),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.alternate_email),
+                Text(
+                  "Email: " + profemail,
+                  style: TextStyle(fontSize: 21),
+                )
+              ],
+            ),
           ),
-          Text(
-            "Email: " + profemail,
-            style: TextStyle(fontSize: 21),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.phone),
+                Text(
+                  "Phone: " + profphone,
+                  style: TextStyle(fontSize: 21),
+                )
+              ],
+            ),
           ),
-          Text(
-            "Phone: " + profphone,
-            style: TextStyle(fontSize: 21),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.location_on),
+                Text(
+                  "City: " + profcity,
+                  style: TextStyle(fontSize: 21),
+                )
+              ],
+            ),
           ),
-          Text(
-            "City: " + profcity,
-            style: TextStyle(fontSize: 21),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.location_city),
+                Text(
+                  "Country: " + profcountry,
+                  style: TextStyle(fontSize: 21),
+                )
+              ],
+            ),
           ),
-          Text(
-            "Country: " + profcountry,
-            style: TextStyle(fontSize: 21),
-          ),
-          Text(
-            "Birthday: " + profbirthday,
-            style: TextStyle(fontSize: 21),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.date_range),
+                Text(
+                  "Birthday: " + profbirthday,
+                  style: TextStyle(fontSize: 21),
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -106,9 +171,59 @@ class ProfessorDetailsstate extends State<ProfessorDetails> {
         profbirthday = profedet.birthday;
       });
     }).catchError((error) {
-      return print(
+      print(
           "elerrro---> "); //Scaffold.of(context).showSnackBar(SnackBar(content: Text("Error" + error.toString())));
     });
+  }
+
+  Widget headerWidget() {
+    return new Card(
+      elevation: 3,
+      color: const Color(0xff167F67),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: new Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new Center(
+            child: new Container(
+              margin: EdgeInsets.only(bottom: 5.0),
+              height: 20.0,
+              width: 80.0,
+            ),
+          ),
+          Text(
+            'School Ready!',
+            style: TextStyle(color: Colors.white, fontSize: 25),
+          ),
+          Icon(
+            Icons.school,
+            size: 100,
+            color: Colors.white,
+          ),
+          new Text(
+            "Professor Details",
+            textAlign: TextAlign.center,
+            style: new TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
+            child: Text(
+              profname,
+              textAlign: TextAlign.center,
+              style: new TextStyle(
+                fontSize: 40,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    //flex: 1,
   }
 }
 
